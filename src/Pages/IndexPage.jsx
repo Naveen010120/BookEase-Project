@@ -11,10 +11,10 @@ function IndexPage({ data, setData }) {
       setPlaces(response.data);
     });
   }, []);
-
+  console.log(places)
   // Filter places based on search query
   const filteredPlaces = places.filter(place =>
-   place && place.title.toLowerCase().includes(data.toLowerCase())
+    place.title?.toLowerCase().includes(data?.toLowerCase()||"")
   );
 
   return (
