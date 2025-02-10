@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react'
 
 function PlaceGallery({place}) {
@@ -20,7 +21,7 @@ function PlaceGallery({place}) {
                 <>
                   <div>
     
-                    <img src={'http://localhost:4000/uploads/' + photo} alt="" />
+                    <img src={'https://bookease-apis.onrender.com/uploads/' + photo} alt="" />
                   </div>
                 </>
     
@@ -37,17 +38,17 @@ function PlaceGallery({place}) {
       <div>
         {place.photos?.[0] && (
           <div>
-            <img onClick={()=>setShowAllPhotos(true)} className='aspect-square object-cover' src={'http://localhost:4000/uploads/' + place.photos[0]} alt="" />
+            <img onClick={()=>setShowAllPhotos(true)} className='aspect-square object-cover' src={'https://bookease-apis.onrender.com/uploads/' + place.photos[0]} alt="" />
           </div>
         )}
       </div>
       <div className='grid '>
         {place.photos?.[1] && (
-          <img onClick={()=>setShowAllPhotos(true)} className='aspect-square object-cover' src={'http://localhost:4000/uploads/' + place.photos[1]} alt="" />
+          <img onClick={()=>setShowAllPhotos(true)} className='aspect-square object-cover' src={'https://bookease-apis.onrender.com/uploads/' + place.photos[1]} alt="" />
         )}
         <div className='overflow-hidden'>
           {place.photos?.[2] && (
-            <img onClick={()=>setShowAllPhotos(true)} className='aspect-square object-cover relative top-2' src={'http://localhost:4000/uploads/' + place.photos[2]} alt="" />
+            <img onClick={()=>setShowAllPhotos(true)} className='aspect-square object-cover relative top-2' src={'https://bookease-apis.onrender.com/uploads/' + place.photos[2]} alt="" />
           )}
         </div>
       </div>

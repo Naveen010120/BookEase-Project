@@ -67,7 +67,7 @@ function PhotosUploader({ addedPhotos, onChange }) {
           addedPhotos.map((link, index) => (
             <div className="relative h-32 flex" key={index}>
               <img
-                src={`http://localhost:4000/uploads/${link}`}
+                src={`https://bookease-apis.onrender.com/uploads/${link}`}
                 alt="Uploaded"
                 className="rounded-md w-full object-cover"
               />

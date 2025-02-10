@@ -28,7 +28,7 @@ function IndexPage({ data, setData }) {
                 {place.photos?.[0] && (
                   <img
                     className="w-full h-48 object-cover"
-                    src={'http://localhost:4000/uploads/' + place.photos[0]}
+                    src={'https://bookease-apis.onrender.com/uploads/' + place.photos[0]}
                     alt={place.title}
                   />
                 )}
