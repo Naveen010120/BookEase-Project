@@ -14,7 +14,7 @@ function IndexPage({ data, setData }) {
 
   // Filter places based on search query
   const filteredPlaces = places.filter(place =>
-    place.title.toLowerCase().includes(data.toLowerCase())
+   place && place.title.toLowerCase().includes(data.toLowerCase())
   );
 
   return (
