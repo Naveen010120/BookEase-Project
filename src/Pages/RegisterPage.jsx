@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import '../index.css'
 import { Link } from 'react-router-dom'
+import registerImg from '../../src/assets/register_avatar.png'
 import axios from 'axios';
 function RegisterPage() {
   let [name,setName]=useState('');
@@ -23,10 +24,13 @@ alert('registation failed. please try again')
  
 }
   return (
-    <div className="mt-4 grow flex items-center justify-around">
-      <div className='-mt-32'>
+    <div className="mt-2 grow flex items-center justify-around">
+      <div className='-mt-10'>
+    <img src={registerImg} alt="" />
+      </div>
+      <div className='-mt-42 '>
       <h1 className="text-4xl text-center mb-4">Register</h1>
-        <form className="max-w-md mx-auto border" onSubmit={registerUser}> 
+        <form className="max-w-md mx-auto border " onSubmit={registerUser}> 
             <input type="text" placeholder='Your Name' value={name} onChange={e=>setName(e.target.value)}/>
             <input type="email" placeholder="your@email.com"  value={email} onChange={e=>setEmail(e.target.value)}/>
             <input type="password" placeholder="password" value={password}  onChange={e=>setpassword(e.target.value)}/>
