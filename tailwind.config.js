@@ -10,6 +10,7 @@ export default {
         primary:'#F53850 '
       }
     },
+    
   },
   plugins: [],
 }

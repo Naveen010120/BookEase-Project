@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
@@ -45,6 +46,16 @@ function BookingWidget({ place }) {
   if (redirect) {
     return <Navigate to={redirect} />;
   }
+  const handlePhoneChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ''); // Only allow numbers
+    setPhone(value);
+  
+    if (value.length !== 10) {
+      setError('Phone number must be exactly 10 digits.');
+    } else {
+      setError('');
+    }
+  };
 
   return (
     <div className='bg-white shadow p-4 rounded-2xl max-w-lg mx-auto w-full md:max-w-xl lg:max-w-2xl'>
@@ -71,12 +82,20 @@ function BookingWidget({ place }) {
             <label>Your Full Name:</label>
             <input className='w-full p-2 border rounded-lg' type='text' placeholder='Enter Full Name' value={name} onChange={(e) => setName(e.target.value)} />
             <label>Phone Number:</label>
-            <input className='w-full p-2 border rounded-lg' type='tel' placeholder='xxxxxxxxx' value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <input 
+      className='w-full p-2 border rounded-lg' 
+      type='tel' 
+      placeholder='xxxxxxxxxx' 
+      required 
+      maxLength={10} 
+      value={phone} 
+      onChange={handlePhoneChange} 
+    />
           </div>
         )}
       </div>
       <button className='primary
-       text-white w-full py-2 mt-4 rounded-lg hover:bg-blue-700' onClick={bookThisPlace}>
+      s text-white w-full py-2 mt-4 rounded-lg hover:bg-blue-700' onClick={bookThisPlace}>
         Book this place {numberOfNights > 0 && <span> - ₹{numberOfNights * place.price}</span>}
       </button>
     </div>

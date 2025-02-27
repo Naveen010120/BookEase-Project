@@ -84,7 +84,9 @@ function PlacesFormPage() {
             if(redirect){
                 return <Navigate to={'/account/places'}/>
             }
-           
+           function handleSaveData(){
+            
+           }
             
   return (
     <div>
@@ -125,7 +127,7 @@ function PlacesFormPage() {
             </div>
         </div>
 
-        <button className='primary my-4'>Save</button>
+        <button className='primary my-4' onClick={handleSaveData}>Save</button>
 
     </form>
 </div>
