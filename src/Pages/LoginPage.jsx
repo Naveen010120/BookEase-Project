@@ -1,76 +1,114 @@
-import { useContext, useState } from 'react';
-import '../index.css';
-import { Link, Navigate } from 'react-router-dom';
-import axios from 'axios';
-import loginImg from '../../src/assets/login_avatar.png';
-import { UserContext } from '../UserContext';
-import { toast } from 'react-toastify';
+import { Link, Navigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import axios from "axios";
+import { UserContext } from "../UserContext.jsx";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
-// Initialize toast notifications
-// toast.configure();
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [redirect, setRedirect] = useState(false);
+  const { setUser } = useContext(UserContext);
+  const [errors, setErrors] = useState({});
 
-function LoginPage() {
-  let [email, setEmail] = useState('');
-  let [password, setPassword] = useState('');
-  let [redirect, setRedirect] = useState(false);
-  let { setUser, setVaildatingData, vaildatingData } = useContext(UserContext);
+  // ✅ Form Validation
+  const validateForm = () => {
+    let formErrors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
-  let handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      let response = await axios.post('/login', { email, password });
-      setVaildatingData(response.data.role);
-      setUser(response.data);
-      // toast.success('success',{ position: toast.POSITION.TOP_RIGHT })
-      alert('login successful')
-     
-
-      setRedirect(true);
-    } catch (error) {
-      // toast.error('Login failed. Please check your credentials.');
-      alert('login failed')
+    if (!email) {
+      formErrors.email = "Email is required";
+    } else if (!emailRegex.test(email)) {
+      formErrors.email = "Invalid email format";
     }
-    setEmail('');
-    setPassword('')
+
+    if (!password) {
+      formErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      formErrors.password = "Password must be at least 6 characters";
+    }
+
+    setErrors(formErrors);
+    return Object.keys(formErrors).length === 0;
+  };
+
+  // ✅ Handle form submission
+  const handleLoginSubmit = async (ev) => {
+    ev.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please fix the form errors before submitting.");
+      return;
+    }
+
+    try {
+      const { data } = await axios.post('/login', {
+        email,
+        password,
+      }, {
+        withCredentials: true,  // Send cookies
+      });
+
+      // ✅ Display success message
+      toast.success('Login successful');
+
+      // ✅ Set user data
+      setUser(data.user);
+
+      // ✅ Trigger alert only after setting the user state
+      setTimeout(() => {
+        // alert('Login successful');
+        setRedirect(true);  // Redirect after alert
+      }, 500);  // Slight delay to ensure the state updates properly
+
+    } catch (error) {
+      console.error('Login error:', error);
+      if (error.response) {
+        toast.error(error.response.data.error || 'Login failed');
+      } else {
+        toast.error('An unexpected error occurred');
+      }
+    }
   };
 
   if (redirect) {
-    if (vaildatingData === 'Admin') {
-      return <Navigate to={'/account'} />;
-    } else if (vaildatingData === 'User') {
-      return <Navigate to={'/'} />;
-    }
+    return <Navigate to="/" />;
   }
 
   return (
-    <div className="mt-4 grow flex items-center justify-around rounded-2xl max-[425px]:flex-col">
-      <div className='w-2/4 min-[300px]:w-3/4'>
-        <img src={loginImg} alt="Login Avatar" className='w-100 border rounded-2xl' />
-      </div>
-      <div className='-mt-42 border-none w-2/4 min-[300px]:w-3/4 mt-5'>
+    
+    <div className="mt-4 grow flex items-center justify-around">
+      <ToastContainer />
+      <div className="mb-64">
         <h1 className="text-4xl text-center mb-4">Login</h1>
-        <form className="max-w-md mx-auto border-none" onSubmit={handleLoginSubmit}>
-          <input 
-            type="email" 
-            placeholder="your@email.com" 
-            value={email} 
-            onChange={e => setEmail(e.target.value)} 
+        <form className="max-w-md mx-auto" onSubmit={handleLoginSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(ev) => setEmail(ev.target.value)}
+            className={`border ${errors.email ? "border-red-500" : "border-gray-300"} p-2 w-full mb-2`}
           />
-          <input 
-            type="password" 
-            placeholder="password" 
-            value={password} 
-            onChange={e => setPassword(e.target.value)} 
+          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(ev) => setPassword(ev.target.value)}
+            className={`border ${errors.password ? "border-red-500" : "border-gray-300"} p-2 w-full mb-2`}
           />
-          <button className='primary'>Login</button>
-          <div className='text-center py-2 text-black min-[300px]:text-2'>
-            Don't have an account yet?
-            <Link to={'/register'} className='underline text-black px-3'>Register now</Link>
+          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+
+          <button className="primary w-full">Login</button>
+
+          <div className="text-center py-2 text-gray-500">
+            Don't have an account?{" "}
+            <Link className="underline text-black" to="/register">Register now</Link>
           </div>
         </form>
       </div>
     </div>
   );
 }
-
-export default LoginPage;
