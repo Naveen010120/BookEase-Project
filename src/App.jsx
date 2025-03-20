@@ -17,7 +17,7 @@ import BookingPage from './Pages/BookingPage'
 import Header from './Header'
 import { useState } from 'react'
 
-axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = 'https://bookease-apis.onrender.com';
 axios.defaults.withCredentials = true;
 function App() {
   let [data,setData]=useState('')
