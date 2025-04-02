@@ -1,25 +1,39 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { selectedValueShare } from "../App";
 
 function IndexPage({ data, setData }) {
   const [places, setPlaces] = useState([]);
+  const { selectedValue } = useContext(selectedValueShare);  
 
   useEffect(() => {
     axios.get('/places').then(response => {
       setPlaces(response.data);
     });
   }, []);
-  console.log(places)
-  // Filter places based on search query
-  const filteredPlaces = places.filter(place =>
-    place.title?.toLowerCase().includes(data?.toLowerCase()||"")
+
+  console.log('Selected Value:', selectedValue);
+  console.log('Places:', places);
+
+  // ✅ Filter by search query first
+  const searchFiltered = places.filter(place =>
+    place.title?.toLowerCase().includes(data?.toLowerCase() || "")
   );
+
+  // ✅ Filter by price range
+  const filteredPlaces = searchFiltered.filter((place) => {
+    const price = parseInt(place.price);
+    if (selectedValue === "Price" || !selectedValue) return true;  // Show all if no filter
+    if (selectedValue === "9999") return price >= 5000 && price <= 9999;
+    if (selectedValue === "19999") return price >= 10000 && price <= 19999;
+    if (selectedValue === "20000") return price >= 20000;
+    return true;
+  });
 
   return (
     <>
-      {/* Search Input */}
       <div className="mt-8 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {filteredPlaces.length > 0 ? (
           filteredPlaces.map((place) => (
